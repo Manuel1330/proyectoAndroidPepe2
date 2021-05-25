@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.proyectoandroidpepe.Datos.DatosApp;
 import com.example.proyectoandroidpepe.Datos.Usuarios;
 import com.example.proyectoandroidpepe.MainActivity;
 import com.example.proyectoandroidpepe.R;
@@ -37,7 +38,6 @@ public class UsuariosFragment extends Fragment {
     EditText etPersonNombreUsuario, etPersonLugarEntrega, etPersonTelefono, etPersonObservaciones, etPersonFechaNacimiento, etPersonAux1, etPersonAux2;
     ImageView ivPersonPhoto;
     Button btnActualizar;
-    Usuarios usuFireBase;
 
     DatabaseReference databaseReference;
 
@@ -100,13 +100,31 @@ public class UsuariosFragment extends Fragment {
 
     public void setTextUsuario(){
 
+        txtPersonName.setText(DatosApp.currentUser.getPersonName());
+        txtPersonGivenName.setText(DatosApp.currentUser.getPersonGivenName());
+        txtPersonFamilyName.setText(DatosApp.currentUser.getPersonFamilyName());
+        txtPersonEmail.setText(DatosApp.currentUser.getPersonEmail());
+        txtPersonId.setText(DatosApp.currentUser.getPersonId());
+
+        etPersonNombreUsuario.setText(DatosApp.currentUser.getPersonNombreUsuario());
+        etPersonLugarEntrega.setText(DatosApp.currentUser.getPersonLugarEntrega());
+        etPersonTelefono.setText(DatosApp.currentUser.getPersonTelefono());
+        etPersonObservaciones.setText(DatosApp.currentUser.getPersonObservaciones());
+        etPersonFechaNacimiento.setText(DatosApp.currentUser.getPersonFechaNacimiento());
+        etPersonAux1.setText(DatosApp.currentUser.getPersonAux1());
+        etPersonAux2.setText(DatosApp.currentUser.getPersonAux2().toString());
+
+        txtPersonUltimoPedido.setText(DatosApp.currentUser.getPersonUltimoPedido());
+        txtPersonSaldo.setText(DatosApp.currentUser.getPersonSaldo().toString());
+
+        /*
         FirebaseDatabase.getInstance().getReference().child("usuario").child(usuarioActual.getPersonId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-               // for (DataSnapshot objeto : snapshot.getChildren()){
-                    // Usuarios usu = (objeto.getValue(Usuarios.class));
-                    // usuFireBase = usu;
-               // }
+                for (DataSnapshot objeto : snapshot.getChildren()){
+                     Usuarios usu = (objeto.getValue(Usuarios.class));
+                     DatosApp.currentUser.getPersonId() = usu;
+                }
 
             }
 
@@ -115,36 +133,18 @@ public class UsuariosFragment extends Fragment {
 
             }
         });
-/*
-        txtPersonName.setText(usuFireBase.getPersonName());
-        txtPersonGivenName.setText(usuFireBase.getPersonGivenName());
-        txtPersonFamilyName.setText(usuFireBase.getPersonFamilyName());
-        txtPersonEmail.setText(usuFireBase.getPersonEmail());
-        txtPersonId.setText(usuFireBase.getPersonId());
-
-        etPersonNombreUsuario.setText(usuFireBase.getPersonNombreUsuario());
-        etPersonLugarEntrega.setText(usuFireBase.getPersonLugarEntrega());
-        etPersonTelefono.setText(usuFireBase.getPersonTelefono());
-        etPersonObservaciones.setText(usuFireBase.getPersonObservaciones());
-        etPersonFechaNacimiento.setText(usuFireBase.getPersonFechaNacimiento());
-        etPersonAux1.setText(usuFireBase.getPersonAux1());
-        etPersonAux2.setText(usuFireBase.getPersonAux2().toString());
-
-        txtPersonUltimoPedido.setText(usuFireBase.getPersonUltimoPedido());
-        txtPersonSaldo.setText(usuFireBase.getPersonSaldo().toString());
-
- */
+        */
     }
 
 
     public void editarUsuario(){
         listaUsuarios.clear();
         Usuarios usuario = new Usuarios(
-                usuarioActual.getPersonName(),
-                usuarioActual.getPersonGivenName(),
-                usuarioActual.getPersonFamilyName(),
-                usuarioActual.getPersonEmail(),
-                usuarioActual.getPersonId(),
+                DatosApp.currentUser.getPersonName(),
+                DatosApp.currentUser.getPersonGivenName(),
+                DatosApp.currentUser.getPersonFamilyName(),
+                DatosApp.currentUser.getPersonEmail(),
+                DatosApp.currentUser.getPersonId(),
                 usuarioActual.getPersonPhoto(),
                 etPersonNombreUsuario.getText().toString(),
                 etPersonLugarEntrega.getText().toString(),
@@ -152,9 +152,9 @@ public class UsuariosFragment extends Fragment {
                 etPersonObservaciones.getText().toString(),
                 etPersonFechaNacimiento.getText().toString(),
                 etPersonAux1.getText().toString(),
-                0.0,
-                "",
-                0.0,
+                Double.parseDouble(etPersonAux2.getText().toString()),
+                txtPersonUltimoPedido.getText().toString(),
+                Double.parseDouble(txtPersonSaldo.getText().toString()),
                 "No"
         );
 
@@ -163,7 +163,7 @@ public class UsuariosFragment extends Fragment {
                 new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        Toast.makeText(getContext(), "Usuario ....Añadido", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Usuario ....Actualizado", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

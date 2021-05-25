@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.example.proyectoandroidpepe.Datos.DatosApp;
 import com.example.proyectoandroidpepe.Datos.Usuarios;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -61,76 +62,20 @@ public class MainActivity extends AppCompatActivity {
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
-
             DatabaseReference userReference = FirebaseDatabase.getInstance()
                     .getReference("usuario")
-                    .child(FirebaseAuth.getInstance().getUid());
+                    .child(signInAccount.getId());
             final Usuarios[] user = new Usuarios[1];
             userReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if (task.isSuccessful()) {
                         user[0] = task.getResult().getValue(Usuarios.class);
+                        subirUsuario(user[0], signInAccount);
                     }
                 }
             });
-            if (user[0] == null) {
-                usuarioActual.setPersonName(signInAccount.getDisplayName());
-                usuarioActual.setPersonGivenName(signInAccount.getGivenName());
-                usuarioActual.setPersonFamilyName(signInAccount.getFamilyName());
-                usuarioActual.setPersonEmail(signInAccount.getEmail());
-                usuarioActual.setPersonId(signInAccount.getId());
-                usuarioActual.setPersonPhoto(signInAccount.getPhotoUrl().toString());
-
-                Usuarios usuario = new Usuarios(
-                        usuarioActual.getPersonName(),
-                        usuarioActual.getPersonGivenName(),
-                        usuarioActual.getPersonFamilyName(),
-                        usuarioActual.getPersonEmail(),
-                        usuarioActual.getPersonId(),
-                        usuarioActual.getPersonPhoto(),
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        0.0,
-                        "",
-                        0.0,
-                        "No"
-                );
-
-                databaseReference.child("usuario").child(usuario.getPersonId()).setValue(usuario,
-                        new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                Toast.makeText(MainActivity.this, "Usuario ....Añadido", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            } else {
-                Toast.makeText(this, "El Usuario ya esta registrado", Toast.LENGTH_SHORT).show();
-            }
-
-
-            /*
-            if (user != null){
-                Toast.makeText(this, "El usuario ya esta registrado", Toast.LENGTH_SHORT).show();
-            }else {
-                databaseReference.child("usuario").child(usuario.getPersonId()).setValue(usuario,
-                        new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                Toast.makeText(MainActivity.this, "Usuario ....Añadido", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-
-             */
-            
         }
-
-
     }
 
     @Override
@@ -154,5 +99,46 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUsuarioactual(Usuarios usuarioactual) {
         this.usuarioActual = usuarioactual;
+    }
+
+    private void subirUsuario(Usuarios user, GoogleSignInAccount signInAccount) {
+        if (user == null) {
+            usuarioActual.setPersonName(signInAccount.getDisplayName());
+            usuarioActual.setPersonGivenName(signInAccount.getGivenName());
+            usuarioActual.setPersonFamilyName(signInAccount.getFamilyName());
+            usuarioActual.setPersonEmail(signInAccount.getEmail());
+            usuarioActual.setPersonId(signInAccount.getId());
+            usuarioActual.setPersonPhoto(signInAccount.getPhotoUrl().toString());
+
+            Usuarios usuario = new Usuarios(
+                    usuarioActual.getPersonName(),
+                    usuarioActual.getPersonGivenName(),
+                    usuarioActual.getPersonFamilyName(),
+                    usuarioActual.getPersonEmail(),
+                    usuarioActual.getPersonId(),
+                    usuarioActual.getPersonPhoto(),
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    0.0,
+                    "",
+                    0.0,
+                    "No"
+            );
+
+            databaseReference.child("usuario").child(usuario.getPersonId()).setValue(usuario,
+                    new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                            Toast.makeText(MainActivity.this, "Usuario ....Añadido", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "El Usuario ya esta registrado", Toast.LENGTH_SHORT).show();
+            DatosApp.currentUser = user;
+        }
     }
 }
