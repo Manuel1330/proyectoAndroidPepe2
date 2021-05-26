@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                             Toast.makeText(MainActivity.this, "Usuario ....Añadido", Toast.LENGTH_SHORT).show();
+                            DatosApp.currentUser = usuario;
                         }
                     });
         } else {
