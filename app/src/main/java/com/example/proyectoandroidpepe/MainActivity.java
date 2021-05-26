@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     0.0,
                     "",
                     0.0,
-                    "No"
+                    "false"
             );
 
             databaseReference.child("usuario").child(usuario.getPersonId()).setValue(usuario,

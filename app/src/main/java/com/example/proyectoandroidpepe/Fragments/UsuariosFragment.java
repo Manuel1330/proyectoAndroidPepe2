@@ -117,24 +117,6 @@ public class UsuariosFragment extends Fragment {
 
         txtPersonUltimoPedido.setText(DatosApp.currentUser.getPersonUltimoPedido());
         txtPersonSaldo.setText(DatosApp.currentUser.getPersonSaldo().toString());
-
-        /*
-        FirebaseDatabase.getInstance().getReference().child("usuario").child(usuarioActual.getPersonId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot objeto : snapshot.getChildren()){
-                     Usuarios usu = (objeto.getValue(Usuarios.class));
-                     DatosApp.currentUser.getPersonId() = usu;
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        */
     }
 
 
@@ -156,7 +138,7 @@ public class UsuariosFragment extends Fragment {
                 Double.parseDouble(etPersonAux2.getText().toString()),
                 txtPersonUltimoPedido.getText().toString(),
                 Double.parseDouble(txtPersonSaldo.getText().toString()),
-                "No"
+                "false"
         );
 
 
