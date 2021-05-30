@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.proyectoandroidpepe.Datos.DatosApp;
 import com.example.proyectoandroidpepe.Datos.Usuarios;
 import com.example.proyectoandroidpepe.MainActivity;
@@ -106,6 +107,7 @@ public class UsuariosFragment extends Fragment {
         txtPersonFamilyName.setText(DatosApp.currentUser.getPersonFamilyName());
         txtPersonEmail.setText(DatosApp.currentUser.getPersonEmail());
         txtPersonId.setText(DatosApp.currentUser.getPersonId());
+        Glide.with(this).load(DatosApp.currentUser.getPersonPhoto()).centerCrop().into(ivPersonPhoto);
 
         etPersonNombreUsuario.setText(DatosApp.currentUser.getPersonNombreUsuario());
         etPersonLugarEntrega.setText(DatosApp.currentUser.getPersonLugarEntrega());
@@ -128,7 +130,7 @@ public class UsuariosFragment extends Fragment {
                 DatosApp.currentUser.getPersonFamilyName(),
                 DatosApp.currentUser.getPersonEmail(),
                 DatosApp.currentUser.getPersonId(),
-                usuarioActual.getPersonPhoto(),
+                DatosApp.currentUser.getPersonPhoto(),
                 etPersonNombreUsuario.getText().toString(),
                 etPersonLugarEntrega.getText().toString(),
                 etPersonTelefono.getText().toString(),
